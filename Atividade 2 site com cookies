@@ -1,0 +1,66 @@
+<?php
+// PARTE 1: LÓGICA DE PROCESSAMENTO DO FORMULÁRIO
+$nome_salvo = '' ;
+$cor_salva = ' #FFFFFF ' ; //Cor padrão (branco)
+// 1. Verifique se o formulário foi enviado (se o método foi POST)
+se ($_SERVER[ ' REQUEST_METHOD ' ] == ' POST ' ) {
+
+// 2. Verifique se os campos 'nome' e 'cor' foram enviados
+if ( isset ($_POST[ ' nome ' ]) && isset ($_POST[ ' cor ' ])) {
+
+// 3. Pega os valores do formulário
+ $nome = $_POST[ ' nome ' ];
+ $cor = $_POST[ ' cor ' ];
+ // 4. Defina os cookies
+ // tempo() + 3600 * 24 * 30 = expira em 30 dias
+ setcookie ( ' nome_usuario ' , $nome, hora () + ( 3600 * 24 * 30 ), " / " );
+ setcookie ( ' cor_favorita ' , $cor, time () + ( 3600 * 24 * 30 ), " / " );
+ // 5. Redireciona para a própria página para evitar reenvio do formulário
+ cabeçalho ( ' Localização: index.php ' );
+ saída ;
+ }
+}
+// PARTE 2: LÓGICA DE LEITURA DOS COOKIES
+// 6. Verifique se os cookies já existem
+if ( isset ($_COOKIE[ ' nome_usuario ' ]) && isset ($_COOKIE[ ' cor_favorita ' ] )) {
+ $nome_salvo = $_COOKIE[ ' nome_usuario ' ];
+ $cor_salva = $_COOKIE[ ' cor_favorita ' ];
+}
+? >
+<! DOCTYPE html >
+< html lang = " pt-br " >
+< cabeçalho >
+ < meta charset = " UTF-8 " >
+ <title> Aula 2 - Biscoitos </title>
+ < estilo >
+ corpo {
+ família-da-fonte : sem-serif ;
+ margem : 20 px ;
+ /* 7. O PHP define o estilo dinamicamente! */
+ background-color : <?php echo htmlspecialchars ($cor_salva); ? > ;
+ }
+ formulário { fundo : #FFF ; preenchimento : 15px ; raio da borda : 5px ; }
+ </ estilo >
+</head>
+< corpo >
+ < h1 >Personalizador de Site com Cookies 🍪</ h1 >
+ <?php
+ // 8. Exibe a saudação se o cookie de nome existir
+ se ($nome_salvo != '' ) {
+ echo " <p>Olá, <strong> " . htmlspecialchars ($nome_salvo) . " </strong>! Esta é a sua cor
+favorita.</p> " ;
+ } outro {
+ echo " <p>Por favor, diga seu nome e sua cor favorita.</p> " ;
+ }
+ ? >
+ < form action = " index.php " method = " POST " >
+ < label for = " nome " >Seu nome:</ label >
+ < input type = " text " id = " nome " name = " nome " required >
+ <br> <br>
+ < label for = " cor " >Sua cor favorita:</ label >
+ < input type = " color " id = " cor " name = " cor " value = " #CCCCCC " >
+ <br> <br>
+ < button type = " submit " >Salvar Preferências</ button >
+ </ formulário >
+</body>
+</ html >
